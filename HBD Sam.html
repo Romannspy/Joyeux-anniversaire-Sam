@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Joyeux anniversaire Sam !</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #fff;
+      text-shadow: 2px 2px #ff69b4;
+      animation: bounce 1s infinite;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .cake {
+      margin-top: 20px;
+      width: 120px;
+      height: 100px;
+      background: #ffb347;
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 4px 0 #d2691e;
+    }
+
+    .candle {
+      width: 10px;
+      height: 20px;
+      background: #fff;
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .flame {
+      width: 10px;
+      height: 10px;
+      background: orange;
+      border-radius: 50%;
+      position: absolute;
+      top: -10px;
+      left: 0;
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    .message {
+      margin-top: 25px;
+      font-size: 1.2em;
+      color: #fff;
+      text-align: center;
+      max-width: 90%;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.2); opacity: 0.7; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 12px;
+      background-color: #ff69b4;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff85c1;
+    }
+.bg-samantha {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-samantha span {
+  position: absolute;
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 2.5em;
+  color: rgba(139, 0, 70, 0.1); /* rose bordeaux très doux */
+  user-select: none;
+  white-space: nowrap;
+  animation: floatText 20s linear infinite;
+}
+
+@keyframes floatText {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-150vh) rotate(360deg);
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="bg-samantha" id="bgWords"></div>
+  <h1>🎉 Joyeux anniversaire Sam ! 🎉</h1>
+  <div class="cake">
+    <div class="candle">
+      <div class="flame"></div>
+    </div>
+  </div>
+
+  <div class="message">
+    Sam, tu es une amie géniale! Continue de rayonner partout où tu vas comme cette petite flamme 💛🎉🕯️
+  </div>
+
+  <button onclick="relancer()">Samantiser la surprise! 🎁</button>
+
+  <canvas id="confetti"></canvas>
+
+  <!-- La musica de Sam ! -->
+  <audio id="music" autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/25/audio_9b025d30a5.mp3" type="audio/mp3">
+    Dsl ton navigateur ne supporte pas l'audio HTML5 🥲 .
+  </audio>
+
+  <script>
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let confettis = [];
+
+    function Confetti() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * -canvas.height;
+      this.radius = Math.random() * 6 + 4;
+      this.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      this.velocityY = Math.random() * 3 + 2;
+      this.velocityX = Math.random() * 2 - 1;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettis.forEach((c, i) => {
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+        ctx.fillStyle = c.color;
+        ctx.fill();
+
+        c.y += c.velocityY;
+        c.x += c.velocityX;
+
+        if (c.y > canvas.height) {
+          confettis[i] = new Confetti();
+          confettis[i].y = 0;
+        }
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    function initConfetti() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      confettis = [];
+      for (let i = 0; i < 150; i++) {
+        confettis.push(new Confetti());
+      }
+      draw();
+    }
+
+    function relancer() {
+      initConfetti();
+      const audio = document.getElementById("music");
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    initConfetti();
+// Je t'ai crée 30 "Samantha" qui flottent! Tu pourras changer après stv
+const bg = document.getElementById("bgWords");
+for (let i = 0; i < 30; i++) {
+  const word = document.createElement("span");
+  word.textContent = "Samantha";
+  word.style.left = Math.random() * 100 + "vw";
+  word.style.top = Math.random() * 100 + "vh";
+  word.style.fontSize = (Math.random() * 1.5 + 1) + "em";
+  word.style.animationDuration = (15 + Math.random() * 20) + "s";
+  bg.appendChild(word);
+}
+
+  </script>
+</body>
+</html>
